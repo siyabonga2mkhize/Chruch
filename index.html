@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sheshi Church - Digital Resources</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .hero-section {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1435527173128-425b2bd1ed07');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .book-card {
+            transition: all 0.3s ease;
+        }
+        
+        .book-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        /* Custom scrollbar for the book content */
+        .book-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .book-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .book-content::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        
+        .book-content::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Animation for book opening */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        /* Custom toggle switch for dark mode */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #68D391;
+        }
+        
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #68D391;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-church text-2xl text-indigo-600 dark:text-indigo-400 mr-2"></i>
+                        <span class="font-serif text-xl font-bold text-gray-900 dark:text-white">Sheshi Church</span>
+                    </div>
+                </div>
+                <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                    <a href="#" class="text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
+                    <a href="#hymns" class="text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Hymns</a>
+                    <a href="#prayers" class="text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Prayers</a>
+                    <a href="#bible" class="text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Bible</a>
+                    
+                    <!-- Dark mode toggle -->
+                    <div class="flex items-center">
+                        <span class="mr-2 text-sm text-gray-700 dark:text-gray-300">
+                            <i class="fas fa-sun"></i>
+                        </span>
+                        <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                            <input type="checkbox" id="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                            <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                        <span class="text-sm text-gray-700 dark:text-gray-300">
+                            <i class="fas fa-moon"></i>
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-500 dark:text-gray-300 hover:text-gray-600 dark:hover:text-gray-100 inline-flex items-center justify-center p-2 rounded-md focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 pb-3 px-2 transition-all duration-300">
+            <div class="pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#" class="block text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-base font-medium transition-colors">Home</a>
+                <a href="#hymns" class="block text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-base font-medium transition-colors">Hymns</a>
+                <a href="#prayers" class="block text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-base font-medium transition-colors">Prayers</a>
+                <a href="#bible" class="block text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-base font-medium transition-colors">Bible</a>
+                
+                <div class="flex items-center justify-between px-3 py-2">
+                    <div class="flex items-center">
+                        <span class="mr-2 text-sm text-gray-700 dark:text-gray-300">
+                            <i class="fas fa-sun"></i>
+                        </span>
+                        <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                            <input type="checkbox" id="mobile-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                            <label for="mobile-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                        <span class="text-sm text-gray-700 dark:text-gray-300">
+                            <i class="fas fa-moon"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section h-96 flex items-center justify-center">
+        <div class="text-center px-4">
+            <h1 class="text-4xl md:text-5xl font-serif font-bold text-white mb-4">Sacred Texts at Your Fingertips</h1>
+            <p class="text-xl text-white mb-8 max-w-2xl mx-auto">Explore our collection of hymns, prayers, and the Holy Bible for spiritual nourishment</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#hymns" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors">Hymn Book</a>
+                <a href="#prayers" class="px-6 py-3 bg-white hover:bg-gray-100 text-indigo-600 rounded-lg font-medium transition-colors">Prayer Book</a>
+                <a href="#bible" class="px-6 py-3 bg-white hover:bg-gray-100 text-indigo-600 rounded-lg font-medium transition-colors">Holy Bible</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Church Announcements -->
+    <section class="py-12 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-serif font-bold text-gray-900 dark:text-white">Church Announcements</h2>
+                <div class="w-20 h-1 bg-indigo-600 mx-auto mt-4"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900 mr-4">
+                                <i class="fas fa-calendar-alt text-indigo-600 dark:text-indigo-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Sunday Service</h3>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300">Join us every Sunday at 10:00 AM for our weekly worship service. Special guest speaker this week.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900 mr-4">
+                                <i class="fas fa-hands-praying text-purple-600 dark:text-purple-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Prayer Meetings</h3>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300">Wednesday prayer meetings at 7:00 PM in the main sanctuary. All are welcome.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900 mr-4">
+                                <i class="fas fa-bible text-blue-600 dark:text-blue-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Bible Study</h3>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300">Thursday Bible study groups meeting at 6:30 PM. Studying the Book of Psalms.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hymn Book Section -->
+    <section id="hymns" class="py-16 bg-white dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-serif font-bold text-gray-900 dark:text-white">Hymn Book</h2>
+                <p class="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl mx-auto">Timeless hymns of faith and worship</p>
+                <div class="w-20 h-1 bg-indigo-600 mx-auto mt-4"></div>
+            </div>
+            
+            <div class="mb-8 flex flex-wrap justify-center">
+                <input type="text" id="hymn-search" placeholder="Search hymns..." class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full md:w-96 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
+            </div>
+            
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Hymn cards will be populated here by JavaScript -->
+            </div>
+            
+            <div class="mt-8 text-center">
+                <button id="load-more-hymns" class="px-6 py-3 border border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-lg font-medium transition-colors dark:border-indigo-400 dark:text-indigo-400 dark:hover:bg-indigo-400 dark:hover:text-gray-900">
+                    Load More Hymns
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prayer Book Section -->
+    <section id="prayers" class="py-16 bg-gray-50 dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-serif font-bold text-gray-900 dark:text-white">Book of Common Prayer</h2>
+                <p class="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl mx-auto">Ancient prayers for modern devotion</p>
+                <div class="w-20 h-1 bg-indigo-600 mx-auto mt-4"></div>
+            </div>
+            
+            <div class="mb-8 flex flex-wrap justify-center items-center gap-4">
+                <div class="relative w-full md:w-auto">
+                    <select id="prayer-category" class="appearance-none px-4 py-2 pr-8 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full dark:bg-gray-800 dark:border-gray-700 dark:text-white">
+                        <option value="all">All Categories</option>
+                        <option value="morning">Morning Prayers</option>
+                        <option value="evening">Evening Prayers</option>
+                        <option value="thanksgiving">Thanksgiving</option>
+                        <option value="confession">Confession</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+                
+                <input type="text" id="prayer-search" placeholder="Search prayers..." class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full md:w-64 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
+            </div>
+            
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Prayer cards will be populated here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Bible Section -->
+    <section id="bible" class="py-16 bg-white dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-serif font-bold text-gray-900 dark:text-white">Holy Bible</h2>
+                <p class="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl mx-auto">Read and study the Word of God</p>
+                <div class="w-20 h-1 bg-indigo-600 mx-auto mt-4"></div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-8">
+                <!-- Bible Navigation -->
+                <div class="w-full md:w-64 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md p-4 h-fit sticky top-4">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Testament</label>
+                        <select id="testament" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <option value="old">Old Testament</option>
+                            <option value="new">New Testament</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Book</label>
+                        <select id="book" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <!-- Books will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Chapter</label>
+                        <select id="chapter" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <!-- Chapters will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <button id="load-bible" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md transition-colors">
+                        Read Scripture
+                    </button>
+                    
+                    <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Daily Verse</h3>
+                        <p id="daily-verse" class="text-sm italic text-gray-600 dark:text-gray-400">Loading...</p>
+                        <button id="refresh-verse" class="mt-2 text-xs text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300">
+                            <i class="fas fa-sync-alt mr-1"></i>New Verse
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Bible Content -->
+                <div class="flex-1">
+                    <!-- Bible content will be populated here by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Book Modal (for Hymns, Prayers, and Bible) -->
+    <div id="book-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75" id="modal-backdrop"></div>
+            </div>
+            
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all max-w-4xl sm:my-8 sm:align-middle sm:w-full dark:bg-gray-800">
+                <div class="px-4 py-3 flex justify-between items-center border-b border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="modal-title">Title</h3>
+                    <button id="close-modal" class="text-gray-400 hover:text-gray-500 focus:outline-none">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="px-4 py-5 sm:p-6 h-96 overflow-y-auto book-content">
+                    <!-- Content will be populated here -->
+                </div>
+                <div class="px-4 py-3 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                    <button id="prev-item" class="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600">
+                        <i class="fas fa-arrow-left mr-1"></i> Previous
+                    </button>
+                    <button id="next-item" class="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600">
+                        Next <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-serif text-xl font-bold mb-4">Grace Covenant</h3>
+                    <p class="text-gray-400">Providing spiritual nourishment through digital access to sacred texts and resources.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="#hymns" class="text-gray-400 hover:text-white transition-colors">Hymns</a></li>
+                        <li><a href="#prayers" class="text-gray-400 hover:text-white transition-colors">Prayers</a></li>
+                        <li><a href="#bible" class="text-gray-400 hover:text-white transition-colors">Bible</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Sermons</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Devotionals</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Bible Studies</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Church Calendar</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Connect With Us</h4>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <p class="text-gray-400"><i class="fas fa-map-marker-alt mr-2"></i>123 Church Street, Anytown</p>
+                    <p class="text-gray-400 mt-2"><i class="fas fa-phone-alt mr-2"></i>(123) 456-7890</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-sm text-gray-400 text-center">
+                <p>© 2023 Grace Covenant Church. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark Mode Toggle
+        const toggle = document.getElementById('toggle');
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const html = document.documentElement;
+        
+        // Check for saved user preference (if any)
+        if (localStorage.getItem('darkMode') === 'true') {
+            html.classList.add('dark');
+            toggle.checked = true;
+            mobileToggle.checked = true;
+        }
+        
+        // Toggle dark mode
+        function toggleDarkMode(isDark) {
+            if (isDark) {
+                html.classList.add('dark');
+                localStorage.setItem('darkMode', 'true');
+            } else {
+                html.classList.remove('dark');
+                localStorage.setItem('darkMode', 'false');
+            }
+        }
+        
+        toggle.addEventListener('change', (e) => {
+            toggleDarkMode(e.target.checked);
+            mobileToggle.checked = e.target.checked;
+        });
+        
+        mobileToggle.addEventListener('change', (e) => {
+            toggleDarkMode(e.target.checked);
+            toggle.checked = e.target.checked;
+        });
+        
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Fetch hymns from hymn.json
+        let hymns = [];
+
+        fetch('Hymn.json')
+            .then(response => response.json())
+            .then(data => {
+                hymns = data;
+                displayHymns(hymns);
+            })
+            .catch(error => console.error('Error loading hymn data:', error));
+        
+        
+        const prayers = [
+            {
+                id: 1,
+                title: "Morning Prayer",
+                text: "Almighty God, who has safely brought us to the beginning of this day: Defend us by thy mighty power, that we may not fall into sin nor run into any danger; and that, guided by thy Spirit, we may do what is righteous in thy sight; through Christ our Lord. Amen.",
+                category: "morning"
+            },
+            {
+                id: 2,
+                title: "Evening Prayer",
+                text: "Lighten our darkness, we beseech thee, O Lord; and by thy great mercy defend us from all perils and dangers of this night; for the love of thy only Son, our Savior Jesus Christ. Amen.",
+                category: "evening"
+            },
+            {
+                id: 3,
+                title: "Prayer of Confession",
+                text: "Most merciful God, we confess that we have sinned against thee in thought, word, and deed, by what we have done, and by what we have left undone. We have not loved thee with our whole heart; we have not loved our neighbors as ourselves. We are truly sorry and we humbly repent. For the sake of thy Son Jesus Christ, have mercy on us and forgive us; that we may delight in thy will, and walk in thy ways, to the glory of thy name. Amen.",
+                category: "confession"
+            },
+            {
+                id: 4,
+                title: "Prayer of Thanksgiving",
+                text: "Almighty God, Father of all mercies, we thine unworthy servants do give thee most humble and hearty thanks for all thy goodness and loving-kindness to us and to all men. We bless thee for our creation, preservation, and all the blessings of this life; but above all for thine inestimable love in the redemption of the world by our Lord Jesus Christ; for the means of grace, and for the hope of glory. And we beseech thee, give us that due sense of all thy mercies, that our hearts may be unfeignedly thankful; and that we show forth thy praise, not only with our lips, but in our lives, by giving up ourselves to thy service, and by walking before thee in holiness and righteousness all our days; through Jesus Christ our Lord, to whom, with thee and the Holy Spirit, be all honor and glory, world without end. Amen.",
+                category: "thanksgiving"
+            },
+            {
+                id: 5,
+                title: "The Lord's Prayer",
+                text: "Our Father, who art in heaven, hallowed be thy Name. Thy kingdom come. Thy will be done, on earth as it is in heaven. Give us this day our daily bread. And forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation, but deliver us from evil. For thine is the kingdom, and the power, and the glory, forever and ever. Amen.",
+                category: "all"
+            }
+        ];
+        
+        const oldTestamentBooks = [
+            "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
+            "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel",
+            "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra",
+            "Nehemiah", "Esther", "Job", "Psalms", "Proverbs",
+            "Ecclesiastes", "Song of Solomon", "Isaiah", "Jeremiah", "Lamentations",
+            "Ezekiel", "Daniel", "Hosea", "Joel", "Amos",
+            "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk",
+            "Zephaniah", "Haggai", "Zechariah", "Malachi"
+        ];
+        
+        const newTestamentBooks = [
+            "Matthew", "Mark", "Luke", "John", "Acts",
+            "Romans", "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians",
+            "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians", "1 Timothy",
+            "2 Timothy", "Titus", "Philemon", "Hebrews", "James",
+            "1 Peter", "2 Peter", "1 John", "2 John", "3 John",
+            "Jude", "Revelation"
+        ];
+        
+        const bibleVersions = {
+            "kjv": "King James Version",
+            "niv": "New International Version",
+            "esv": "English Standard Version"
+        };
+        
+        // Sample daily verses (in a real app, this would come from an API)
+        const dailyVerses = [
+            {
+                reference: "John 3:16",
+                text: "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life."
+            },
+            {
+                reference: "Philippians 4:13",
+                text: "I can do all things through Christ which strengtheneth me."
+            },
+            {
+                reference: "Psalm 23:1",
+                text: "The LORD is my shepherd; I shall not want."
+            },
+            {
+                reference: "Romans 8:28",
+                text: "And we know that all things work together for good to them that love God, to them who are the called according to his purpose."
+            },
+            {
+                reference: "Proverbs 3:5-6",
+                text: "Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths."
+            }
+        ];
+        
+        // Modal functionality
+        const modal = document.getElementById('book-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.querySelector('.book-content');
+        const closeModal = document.getElementById('close-modal');
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const prevItemBtn = document.getElementById('prev-item');
+        const nextItemBtn = document.getElementById('next-item');
+        
+        let currentItems = [];
+        let currentIndex = 0;
+        
+        function openModal(title, content, items, index) {
+            modalTitle.textContent = title;
+            modalContent.innerHTML = content;
+            currentItems = items;
+            currentIndex = index;
+            
+            // Update navigation buttons
+            prevItemBtn.style.display = currentIndex > 0 ? 'inline-flex' : 'none';
+            nextItemBtn.style.display = currentIndex < currentItems.length - 1 ? 'inline-flex' : 'none';
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('fade-in');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModalFunc() {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+        
+        closeModal.addEventListener('click', closeModalFunc);
+        modalBackdrop.addEventListener('click', closeModalFunc);
+        
+        prevItemBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                const item = currentItems[currentIndex];
+                modalTitle.textContent = item.title || `Hymn ${item.number}`;
+                modalContent.innerHTML = item.text ? `<p>${item.text}</p>` : `<pre>${item.lyrics}</pre>`;
+                
+                // Update navigation buttons
+                prevItemBtn.style.display = currentIndex > 0 ? 'inline-flex' : 'none';
+                nextItemBtn.style.display = 'inline-flex';
+            }
+        });
+        
+        nextItemBtn.addEventListener('click', () => {
+            if (currentIndex < currentItems.length - 1) {
+                currentIndex++;
+                const item = currentItems[currentIndex];
+                modalTitle.textContent = item.title || `Hymn ${item.number}`;
+                modalContent.innerHTML = item.text ? `<p>${item.text}</p>` : `<pre>${item.lyrics}</pre>`;
+                
+                // Update navigation buttons
+                nextItemBtn.style.display = currentIndex < currentItems.length - 1 ? 'inline-flex' : 'none';
+                prevItemBtn.style.display = 'inline-flex';
+            }
+        });
+        
+        // Hymn Book Functionality
+        function displayHymns(hymnsToDisplay) {
+            const hymnsContainer = document.querySelector('#hymns .grid');
+            hymnsContainer.innerHTML = '';
+            
+            hymnsToDisplay.forEach(hymn => {
+                const hymnCard = document.createElement('div');
+                hymnCard.className = 'book-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col';
+                
+                hymnCard.innerHTML = `
+                    <div class="p-6 flex-1">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">${hymn.title}</h3>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">Hymn #${hymn.number}</span>
+                            </div>
+                            <div class="px-2 py-1 bg-indigo-100 dark:bg-indigo-900 rounded text-xs text-indigo-800 dark:text-indigo-200 font-medium">
+                                ${hymn.category.charAt(0).toUpperCase() + hymn.category.slice(1)}
+                            </div>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 mt-4 line-clamp-4">${hymn.lyrics.split('\n')[0] + '...'}</p>
+                    </div>
+                    <div class="px-6 py-3 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
+                        <button class="view-hymn-btn w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md transition-colors" data-id="${hymn.id}">
+                            View Hymn
+                        </button>
+                    </div>
+                `;
+                
+                hymnsContainer.appendChild(hymnCard);
+            });
+            
+            // Add event listeners to the view buttons
+            document.querySelectorAll('.view-hymn-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const hymnId = parseInt(e.target.getAttribute('data-id'));
+                    const hymn = hymns.find(h => h.id === hymnId);
+                    const formattedLyrics = hymn.lyrics.replace(/\n/g, '<br>');
+                    
+                    openModal(`Hymn ${hymn.number}: ${hymn.title}`, `<pre class="font-sans">${formattedLyrics}</pre>`, hymnsToDisplay, hymnsToDisplay.findIndex(h => h.id === hymnId));
+                });
+            });
+        }
+        
+        // Initial display of hymns
+        displayHymns(hymns);
+        
+        // Hymn search functionality
+        const hymnSearch = document.getElementById('hymn-search');
+        hymnSearch.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredHymns = hymns.filter(hymn => 
+                hymn.title.toLowerCase().includes(searchTerm) || 
+                hymn.lyrics.toLowerCase().includes(searchTerm) ||
+                hymn.number.toString().includes(searchTerm)
+            );
+            displayHymns(filteredHymns);
+        });
+        
+        // Load more hymns
+        const loadMoreHymnsBtn = document.getElementById('load-more-hymns');
+        loadMoreHymnsBtn.addEventListener('click', () => {
+            // In a real app, this would load more hymns from an API
+            alert('In a fully implemented app, this would load additional hymns from the server.');
+        });
+        
+        // Prayer Book Functionality
+        function displayPrayers(prayersToDisplay) {
+            const prayersContainer = document.querySelector('#prayers .grid');
+            prayersContainer.innerHTML = '';
+            
+            prayersToDisplay.forEach(prayer => {
+                const prayerCard = document.createElement('div');
+                prayerCard.className = 'book-card bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col';
+                
+                prayerCard.innerHTML = `
+                    <div class="p-6 flex-1">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">${prayer.title}</h3>
+                        <div class="mb-3">
+                            <span class="px-2 py-1 bg-${prayer.category === 'morning' ? 'blue' : prayer.category === 'evening' ? 'purple' : prayer.category === 'thanksgiving' ? 'green' : prayer.category === 'confession' ? 'red' : 'indigo'}-100 dark:bg-${prayer.category === 'morning' ? 'blue' : prayer.category === 'evening' ? 'purple' : prayer.category === 'thanksgiving' ? 'green' : prayer.category === 'confession' ? 'red' : 'indigo'}-900 rounded text-xs text-${prayer.category === 'morning' ? 'blue' : prayer.category === 'evening' ? 'purple' : prayer.category === 'thanksgiving' ? 'green' : prayer.category === 'confession' ? 'red' : 'indigo'}-800 dark:text-${prayer.category === 'morning' ? 'blue' : prayer.category === 'evening' ? 'purple' : prayer.category === 'thanksgiving' ? 'green' : prayer.category === 'confession' ? 'red' : 'indigo'}-200 font-medium">
+                                ${prayer.category.charAt(0).toUpperCase() + prayer.category.slice(1)}
+                            </span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 mt-3 line-clamp-4">${prayer.text.split(' ').slice(0, 20).join(' ') + '...'}</p>
+                    </div>
+                    <div class="px-6 py-3 bg-gray-50 dark:bg-gray-600 border-t border-gray-200 dark:border-gray-500">
+                        <button class="view-prayer-btn w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md transition-colors" data-id="${prayer.id}">
+                            View Prayer
+                        </button>
+                    </div>
+                `;
+                
+                prayersContainer.appendChild(prayerCard);
+            });
+            
+            // Add event listeners to the view buttons
+            document.querySelectorAll('.view-prayer-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const prayerId = parseInt(e.target.getAttribute('data-id'));
+                    const prayer = prayers.find(p => p.id === prayerId);
+                    
+                    openModal(prayer.title, `<p class="text-gray-700 dark:text-gray-300">${prayer.text.replace(/\n/g, '<br><br>')}</p>`, prayersToDisplay, prayersToDisplay.findIndex(p => p.id === prayerId));
+                });
+            });
+        }
+        
+        // Initial display of prayers
+        displayPrayers(prayers);
+        
+        // Prayer filtering functionality
+        const prayerCategory = document.getElementById('prayer-category');
+        const prayerSearch = document.getElementById('prayer-search');
+        
+        function filterPrayers() {
+            const category = prayerCategory.value;
+            const searchTerm = prayerSearch.value.toLowerCase();
+            
+            let filteredPrayers = prayers;
+            
+            if (category !== 'all') {
+                filteredPrayers = filteredPrayers.filter(prayer => prayer.category === category);
+            }
+            
+            if (searchTerm) {
+                filteredPrayers = filteredPrayers.filter(prayer => 
+                    prayer.title.toLowerCase().includes(searchTerm) || 
+                    prayer.text.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            displayPrayers(filteredPrayers);
+        }
+        
+        prayerCategory.addEventListener('change', filterPrayers);
+        prayerSearch.addEventListener('input', filterPrayers);
+        
+        // Bible Functionality
+        const testamentSelect = document.getElementById('testament');
+        const bookSelect = document.getElementById('book');
+        const chapterSelect = document.getElementById('chapter');
+        const loadBibleBtn = document.getElementById('load-bible');
+        const dailyVerse = document.getElementById('daily-verse');
+        const refreshVerseBtn = document.getElementById('refresh-verse');
+        const bibleContentContainer = document.querySelector('#bible .flex-1');
+        
+        // Populate books based on testament
+        function populateBooks() {
+            bookSelect.innerHTML = '';
+            const books = testamentSelect.value === 'old' ? oldTestamentBooks : newTestamentBooks;
+            
+            books.forEach((book, index) => {
+                const option = document.createElement('option');
+                option.value = index + 1;
+                option.textContent = book;
+                bookSelect.appendChild(option);
+            });
+            
+            // Trigger chapter population
+            populateChapters();
+        }
+        
+        // Populate chapters (for demo purposes, we'll just show 1-10)
+        function populateChapters() {
+            chapterSelect.innerHTML = '';
+            
+            for (let i = 1; i <= 10; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `Chapter ${i}`;
+                chapterSelect.appendChild(option);
+            }
+        }
+        
+        // Load bible content (in a real app, this would fetch from an API)
+        function loadBibleContent() {
+            const testament = testamentSelect.value;
+            const bookIndex = parseInt(bookSelect.value);
+            const bookName = testament === 'old' ? oldTestamentBooks[bookIndex - 1] : newTestamentBooks[bookIndex - 1];
+            const chapter = parseInt(chapterSelect.value);
+            
+            // In a real app, this would be an API call
+            bibleContentContainer.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 fade-in">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">${bookName} ${chapter}</h3>
+                        <div class="flex items-center">
+                            <select class="px-3 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="kjv">KJV</option>
+                                <option value="niv">NIV</option>
+                                <option value="esv">ESV</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="book-content prose dark:prose-invert max-w-none h-96 overflow-y-auto">
+                        <p class="mb-4">1 In the beginning God created the heaven and the earth.</p>
+                        <p class="mb-4">2 And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.</p>
+                        <p class="mb-4">3 And God said, Let there be light: and there was light.</p>
+                        <p class="mb-4">4 And God saw the light, that it was good: and God divided the light from the darkness.</p>
+                        <p class="mb-4">5 And God called the light Day, and the darkness he called Night. And the evening and the morning were the first day.</p>
+                        <p>In a fully implemented application, this would display the actual Bible text for the selected book and chapter from an API like Bible Gateway or YouVersion.</p>
+                    </div>
+                    
+                    <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 flex justify-between">
+                        <button class="prev-chapter-btn inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600">
+                            <i class="fas fa-arrow-left mr-1"></i> Previous Chapter
+                        </button>
+                        <button class="next-chapter-btn inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600">
+                            Next Chapter <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners to chapter navigation
+            document.querySelector('.prev-chapter-btn')?.addEventListener('click', () => {
+                if (chapter > 1) {
+                    chapterSelect.value = chapter - 1;
+                    loadBibleContent();
+                }
+            });
+            
+            document.querySelector('.next-chapter-btn')?.addEventListener('click', () => {
+                if (chapter < 10) { // In a real app, this would check the actual number of chapters
+                    chapterSelect.value = chapter + 1;
+                    loadBibleContent();
+                }
+            });
+        }
+        
+        // Set up daily verse (random for demo)
+        function setDailyVerse() {
+            const randomVerse = dailyVerses[Math.floor(Math.random() * dailyVerses.length)];
+            dailyVerse.innerHTML = `<strong>${randomVerse.reference}</strong><br>${randomVerse.text}`;
+        }
+        
+        // Initialize
+        testamentSelect.addEventListener('change', populateBooks);
+        bookSelect.addEventListener('change', populateChapters);
+        loadBibleBtn.addEventListener('click', loadBibleContent);
+        refreshVerseBtn.addEventListener('click', setDailyVerse);
+        
+        // Initial setup
+        populateBooks();
+        setDailyVerse();
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModalFunc();
+            }
+        });
+    </script>
+</body>
+</html>
